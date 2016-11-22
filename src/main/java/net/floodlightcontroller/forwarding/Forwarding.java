@@ -86,6 +86,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.LoadingCache;
+import net.floodlightcontroller.dropmeter.DropMeter;
+
 
 @LogMessageCategory("Flow Programming")
 public class Forwarding extends ForwardingBase implements IFloodlightModule {
@@ -327,6 +329,8 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 							TransportPort srcPort = tcp2.getSourcePort();
 							TransportPort dstPort = tcp2.getDestinationPort();
 							
+							log.info("SrcPort is *******");
+							log.info(srcPort.toString());
 							String ports= srcIp2.toString()+"-"+String.valueOf(srcPort.getPort()) + "-"+ dstIp2.toString() +String.valueOf(dstPort.getPort()) ;
 							if(!map.containsKey(ports)){
 							
@@ -356,6 +360,8 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 							    //randomly choose a path --> Simulating ECMP behavior
 								int index = randomGenerator.nextInt(v.size());
 								//log.info( " Index=" + index + "Selected ecmp route= " + v.get(index).toString());
+								log.info("Line 316: RANDOM FORWARDING");
+								log.info(v.get(index).getPath().toString());
 								pushRoute(v.get(index), m, pi, sw.getId(), cookie,
 										cntx, requestFlowRemovedNotifn, false,
 										OFFlowModCommand.ADD);
@@ -401,7 +407,22 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 								pathCache.put(srcIp2+"-"+dstIp2, v);
 								
 								}
-						
+
+								log.info("Line 408: CAPABLE");
+								log.info(v.get(0).getPath().toString());
+								log.info("Switch ID");
+						    	log.info(sw.getId().toString());
+						    	log.info("Port ID");
+						    	log.info(v.get(0).getPath().get(1).getPortId().toString());
+								
+								DropMeter dm = new DropMeter();
+							    IOFSwitch  mySwitch0 = switchService.getSwitch((v.get(0).getPath().get(1).getNodeId()));
+								dm.createMeter(mySwitch0);
+								log.info("Line 420 Switch ID");
+								log.info(mySwitch0.getId().toString());
+					            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch0, srcPort, v.get(0));
+					            
+
 								pushRoute(v.get(0), m, pi, sw.getId(), cookie,
 										cntx, requestFlowRemovedNotifn, false,
 										OFFlowModCommand.ADD);
@@ -430,6 +451,7 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 								MptcpConnection c = flows.get(byteArray2Hex(token));
 								if(c==null){
 									//log.info("Connection not found!!!!");
+									log.info("new connection using token {}",byteArray2Hex(token));
 									MptcpConnection newConnection = new MptcpConnection(srcIp2,dstIp2,srcPort.getPort(),dstPort.getPort(),token);
 									flows.put(byteArray2Hex(token), newConnection);
 									
@@ -459,6 +481,27 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 								    newConnection.addRoutes(srcIp2, dstIp2, v2,subNum);
 								    Route route2 = newConnection.getNextRoute(srcIp2, dstIp2);
 								    //log.info("Selected Route (MPJOIN) = " + route2.toString());
+									
+
+
+						            // dm.bindMeterWithFlow(sw, srcPort, route2);
+						            IOFSwitch  mySwitch = switchService.getSwitch((route2.getPath().get(1).getNodeId()));
+						            log.info("Line 469: JOIN");
+									log.info(route2.getPath().toString());
+
+							    	log.info("Switch ID");
+							    	log.info(mySwitch.getId().toString());
+							    	log.info(sw.getId().toString());
+							    	log.info("Port ID");
+							    	log.info(route2.getPath().get(1).getPortId().toString());
+
+									DropMeter dm = new DropMeter();
+									dm.createMeter(mySwitch);
+									log.info("Line 499 Switch ID");
+									log.info(mySwitch.getId().toString());
+						            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch, srcPort, route2);
+						            
+
 									pushRoute(route2, m, pi, sw.getId(), cookie,
 											cntx, requestFlowRemovedNotifn, false,
 											OFFlowModCommand.ADD);		
@@ -471,13 +514,38 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 									}
 								else{
 									//log.info("Connection retrieved successfully");
-									
+									log.info("exist pair using token {}",byteArray2Hex(token));
 								if(c.ipsAlreadySeen(srcIp2, dstIp2)){
 									//log.info("Already seen those ips");
 									
 									Route newRoute =c.getNextRoute(srcIp2, dstIp2);
 								   //log.info("Selected Route for MP_JOIN -- Connection Retrieved Successfully = " + newRoute.toString());
 									//log.info("Selected route size= " + newRoute.getPath().size());
+
+
+									
+
+
+
+
+									IOFSwitch  mySwitch1 = switchService.getSwitch((newRoute.getPath().get(1).getNodeId()));
+
+									log.info("Line 493: JOIN2");
+									log.info(newRoute.getPath().toString());
+
+							    	log.info("Switch ID");
+							    	log.info(mySwitch1.getId().toString());
+							    	log.info(sw.getId().toString());
+							    	log.info("Port ID");
+							    	log.info(newRoute.getPath().get(1).getPortId().toString());
+
+									DropMeter dm = new DropMeter();
+									dm.createMeter(mySwitch1);
+									log.info("Line 543 Switch ID");
+									log.info(mySwitch1.getId().toString());
+						            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch1, srcPort, newRoute);
+						            
+
 
 									pushRoute(newRoute, m, pi, sw.getId(), cookie,
 										cntx, requestFlowRemovedNotifn, false,
@@ -511,6 +579,27 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 									   //log.info("Selected Route for MP_JOIN -- Connection Retrieved Successfully = " + newRoute.toString());
 									//log.info("Selected route size= " + newRoute.getPath().size());
 
+									
+
+										IOFSwitch  mySwitch2 = switchService.getSwitch((newRoute.getPath().get(1).getNodeId()));
+
+										log.info("Line 529: JOIN3");
+										log.info(newRoute.getPath().toString());
+
+								    	log.info("Switch ID");
+								    	log.info(mySwitch2.getId().toString());
+								    	log.info(sw.getId().toString());
+								    	log.info("Port ID");
+								    	log.info(newRoute.getPath().get(1).getPortId().toString());
+
+										DropMeter dm = new DropMeter();
+										dm.createMeter(mySwitch2);
+										log.info("Line 596 Switch ID");
+										log.info(mySwitch2.getId().toString());
+							            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch2, srcPort, newRoute);
+							            
+
+
 										pushRoute(newRoute, m, pi, sw.getId(), cookie,
 											cntx, requestFlowRemovedNotifn, false,
 											OFFlowModCommand.ADD);
@@ -536,6 +625,11 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 								}
 							    //randomly choose a path --> Simulating ECMP behavior
 								int index = randomGenerator.nextInt(v.size());
+
+										log.info("Line 560: UNKNOWN SUBTYPE");
+										log.info(v.get(index).getPath().toString());
+
+
 								pushRoute(v.get(index), m, pi, sw.getId(), cookie,
 										cntx, requestFlowRemovedNotifn, false,
 										OFFlowModCommand.ADD);
@@ -548,6 +642,13 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 							}
 							}
 							}else{
+
+
+										log.info("Line 578: FIND IN MP");
+										log.info(map.get(ports).getPath().toString());
+
+
+
 								pushRoute(map.get(ports), m, pi, sw.getId(), cookie,
 										cntx, requestFlowRemovedNotifn, false,
 										OFFlowModCommand.ADD);
@@ -560,13 +661,27 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 							
 							}
 							else{
+
+
+										log.info("Line 597: NOT  TCP");
+										log.info(route.getPath().toString());
+
+
+
 							pushRoute(route, m, pi, sw.getId(), cookie,
 									cntx, requestFlowRemovedNotifn, false,
 									OFFlowModCommand.ADD);
 
 							}
 						}
-							else{
+							else{									
+										log.info("Line 609: NOT IPV4");
+										log.info(route.getPath().toString());
+
+
+
+
+
 								pushRoute(route, m, pi, sw.getId(), cookie,
 										cntx, requestFlowRemovedNotifn, false,
 										OFFlowModCommand.ADD);
