@@ -8,36 +8,39 @@ import java.util.Map;
 import java.util.Set;
 
 import org.projectfloodlight.openflow.types.DatapathId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.floodlightcontroller.core.module.FloodlightModuleContext;
 import net.floodlightcontroller.core.module.FloodlightModuleException;
 import net.floodlightcontroller.core.module.IFloodlightModule;
 import net.floodlightcontroller.core.module.IFloodlightService;
 import net.floodlightcontroller.linkdiscovery.ILinkDiscovery.LDUpdate;
+import net.floodlightcontroller.linkdiscovery.internal.LinkDiscoveryManager;
 import net.floodlightcontroller.linkdiscovery.Link;
 import net.floodlightcontroller.topology.ITopologyListener;
 import net.floodlightcontroller.topology.ITopologyService;
 
 public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodlightModule {
 
+	protected static final Logger log = LoggerFactory.getLogger(FDMCalculator.class);
+
 	// Protected variables we'll be using
 	protected ITopologyService topologyService;		// Topology service that we'll be calling
-	// Declare FDL needed stuff here, such as End1[] and End2[]
-	protected int nl;
-	protected LinkedList<Long> End1; // Stub!
-	protected LinkedList<Long> End2;
-	// protected LinkedList<Long> req;
-	
+
+	private Map<Link, Float> globalLinkFlows;
 	
 	@Override
 	public Collection<Class<? extends IFloodlightService>> getModuleServices() {
 		// TODO Auto-generated method stub
+		log.info("getModuleServices");
 		return null;
 	}
 
 	@Override
 	public Map<Class<? extends IFloodlightService>, IFloodlightService> getServiceImpls() {
 		// TODO Auto-generated method stub
+		log.info("getServiceImpls");
 		return null;
 	}
 
@@ -48,6 +51,8 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		Collection<Class<? extends IFloodlightService>> l = 
 				new ArrayList<Class<? extends IFloodlightService>>();
 		l.add(ITopologyService.class);
+		log.info("getModuleDependencies");
+
 		return l;
 	}
 
@@ -56,18 +61,22 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 			throws FloodlightModuleException {
 		// Initialize our dependencies
 		topologyService = context.getServiceImpl(ITopologyService.class);
+		topologyService.addListener(FDMCalculator.this);
+		log.info("init");
+
 	}
 
 	@Override
 	public void startUp(FloodlightModuleContext context) 
 			throws FloodlightModuleException {
 		// TODO Auto-generated method stub
-
+		log.info("startup");
 	}
 
 	@Override
 	public void topologyChanged(List<LDUpdate> linkUpdates) {
 		// Update our topology
+		log.info("topologyChanged");
 		buildTopology();
 	}
 
@@ -90,7 +99,13 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 	public double getFlowBW(DatapathId srcNodeID, DatapathId desNodeID) {
 		// TODO Auto-generated method stub
 		// Go through End1 and End2, find match, find match in Gflow
-		return 0;
+		return 0.0;
+	}
+	
+	@Override
+	public float getFlowBW(Link link) {
+		// TODO Auto-generated method stub
+		return globalLinkFlows.get(link);
 	}
 	
 	/**
@@ -115,7 +130,19 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		int index = 0;
 		
 		linkMap = topologyService.getAllLinks();
+		log.info("Got all Links");
+		log.info("Size" + linkMap.size());
+		log.info("To String: " + linkMap.toString());
+
+		FDMTopology top = new FDMTopology(1, linkMap);
+		float delta = 1.0f;
+		float epsilon = 0.9f;
+		FlowDeviationMethod fdm = new FlowDeviationMethod(delta, epsilon);
+//		globalLinkFlows = fdm.runFDM(top);
 		
+		log.info("Global Flows: " + globalLinkFlows);
+	
+
 		// Get keys into collection. Allows traverse in map.
 		idCollection = linkMap.keySet();
 		
