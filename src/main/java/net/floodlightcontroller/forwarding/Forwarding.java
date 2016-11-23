@@ -408,19 +408,29 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 								
 								}
 
+								IOFSwitch  currentSwitch = switchService.getSwitch((v.get(0).getPath().get(1).getNodeId()));
+								OFPort currentPort = v.get(0).getPath().get(1).getPortId();			
+								IOFSwitch  nextSwitch = switchService.getSwitch((v.get(0).getPath().get(2).getNodeId()));
+								OFPort nextPort = v.get(0).getPath().get(2).getPortId();
+
+
 								log.info("Line 408: CAPABLE");
 								log.info(v.get(0).getPath().toString());
 								log.info("Switch ID");
-						    	log.info(sw.getId().toString());
+						    	log.info(currentSwitch.getId().toString());
 						    	log.info("Port ID");
 						    	log.info(v.get(0).getPath().get(1).getPortId().toString());
 								
+
+					            // log.info("This is the switch & port information. ");
+					            // log.info(currentSwitch.toString());
+					            // log.info(currentPort.toString());
+					            // log.info(nextSwitch.toString());
+					            // log.info(nextPort.toString());
+
 								DropMeter dm = new DropMeter();
-							    IOFSwitch  mySwitch0 = switchService.getSwitch((v.get(0).getPath().get(1).getNodeId()));
-								dm.createMeter(mySwitch0);
-								log.info("Line 420 Switch ID");
-								log.info(mySwitch0.getId().toString());
-					            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch0, srcPort, v.get(0));
+								dm.createMeter(currentSwitch, currentPort, nextSwitch, nextPort);
+					            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, currentSwitch, srcPort, v.get(0));
 					            
 
 								pushRoute(v.get(0), m, pi, sw.getId(), cookie,
@@ -484,22 +494,31 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 									
 
 
+									IOFSwitch  currentSwitch = switchService.getSwitch((route2.getPath().get(1).getNodeId()));
+									OFPort currentPort = route2.getPath().get(1).getPortId();			
+									IOFSwitch  nextSwitch = switchService.getSwitch((route2.getPath().get(2).getNodeId()));
+									OFPort nextPort = route2.getPath().get(2).getPortId();
+
 						            // dm.bindMeterWithFlow(sw, srcPort, route2);
 						            IOFSwitch  mySwitch = switchService.getSwitch((route2.getPath().get(1).getNodeId()));
 						            log.info("Line 469: JOIN");
 									log.info(route2.getPath().toString());
 
 							    	log.info("Switch ID");
-							    	log.info(mySwitch.getId().toString());
+							    	log.info(currentSwitch.getId().toString());
 							    	log.info(sw.getId().toString());
 							    	log.info("Port ID");
 							    	log.info(route2.getPath().get(1).getPortId().toString());
 
+						            // log.info("This is the switch & port information. ");
+						            // log.info(currentSwitch.toString());
+						            // log.info(currentPort.toString());
+						            // log.info(nextSwitch.toString());
+						            // log.info(nextPort.toString());
+
 									DropMeter dm = new DropMeter();
-									dm.createMeter(mySwitch);
-									log.info("Line 499 Switch ID");
-									log.info(mySwitch.getId().toString());
-						            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch, srcPort, route2);
+									dm.createMeter(currentSwitch, currentPort, nextSwitch, nextPort);
+						            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, currentSwitch, srcPort, route2);
 						            
 
 									pushRoute(route2, m, pi, sw.getId(), cookie,
@@ -523,27 +542,32 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 									//log.info("Selected route size= " + newRoute.getPath().size());
 
 
-									
+								
 
-
-
-
-									IOFSwitch  mySwitch1 = switchService.getSwitch((newRoute.getPath().get(1).getNodeId()));
+									IOFSwitch  currentSwitch = switchService.getSwitch((newRoute.getPath().get(1).getNodeId()));
+									OFPort currentPort = newRoute.getPath().get(1).getPortId();			
+									IOFSwitch  nextSwitch = switchService.getSwitch((newRoute.getPath().get(2).getNodeId()));
+									OFPort nextPort = newRoute.getPath().get(2).getPortId();
 
 									log.info("Line 493: JOIN2");
 									log.info(newRoute.getPath().toString());
 
 							    	log.info("Switch ID");
-							    	log.info(mySwitch1.getId().toString());
+							    	log.info(currentSwitch.getId().toString());
 							    	log.info(sw.getId().toString());
 							    	log.info("Port ID");
 							    	log.info(newRoute.getPath().get(1).getPortId().toString());
 
+						            // log.info("This is the switch & port information. ");
+						            // log.info(currentSwitch.toString());
+						            // log.info(currentPort.toString());
+						            // log.info(nextSwitch.toString());
+						            // log.info(nextPort.toString());
+
+
 									DropMeter dm = new DropMeter();
-									dm.createMeter(mySwitch1);
-									log.info("Line 543 Switch ID");
-									log.info(mySwitch1.getId().toString());
-						            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch1, srcPort, newRoute);
+									dm.createMeter(currentSwitch, currentPort, nextSwitch, nextPort);
+						            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, currentSwitch, srcPort, newRoute);
 						            
 
 
@@ -581,22 +605,31 @@ public class Forwarding extends ForwardingBase implements IFloodlightModule {
 
 									
 
-										IOFSwitch  mySwitch2 = switchService.getSwitch((newRoute.getPath().get(1).getNodeId()));
+										IOFSwitch  currentSwitch = switchService.getSwitch((newRoute.getPath().get(1).getNodeId()));
+										OFPort currentPort = newRoute.getPath().get(1).getPortId();			
+										IOFSwitch  nextSwitch = switchService.getSwitch((newRoute.getPath().get(2).getNodeId()));
+										OFPort nextPort = newRoute.getPath().get(2).getPortId();
+
+
+
 
 										log.info("Line 529: JOIN3");
 										log.info(newRoute.getPath().toString());
-
 								    	log.info("Switch ID");
-								    	log.info(mySwitch2.getId().toString());
+								    	log.info(currentSwitch.getId().toString());
 								    	log.info(sw.getId().toString());
 								    	log.info("Port ID");
 								    	log.info(newRoute.getPath().get(1).getPortId().toString());
 
+							            // log.info("This is the switch & port information. ");
+							            // log.info(currentSwitch.toString());
+							            // log.info(currentPort.toString());
+							            // log.info(nextSwitch.toString());
+							            // log.info(nextPort.toString());
+
 										DropMeter dm = new DropMeter();
-										dm.createMeter(mySwitch2);
-										log.info("Line 596 Switch ID");
-										log.info(mySwitch2.getId().toString());
-							            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, mySwitch2, srcPort, newRoute);
+										dm.createMeter(currentSwitch, currentPort, nextSwitch, nextPort);
+							            dm.bindMeterWithFlow(inPort, dstPort, srcIp2, currentSwitch, srcPort, newRoute);
 							            
 
 
