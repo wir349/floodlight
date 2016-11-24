@@ -1,8 +1,8 @@
 package net.floodlightcontroller.fdmcalculator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +16,6 @@ import net.floodlightcontroller.core.module.FloodlightModuleException;
 import net.floodlightcontroller.core.module.IFloodlightModule;
 import net.floodlightcontroller.core.module.IFloodlightService;
 import net.floodlightcontroller.linkdiscovery.ILinkDiscovery.LDUpdate;
-import net.floodlightcontroller.linkdiscovery.internal.LinkDiscoveryManager;
 import net.floodlightcontroller.linkdiscovery.Link;
 import net.floodlightcontroller.topology.ITopologyListener;
 import net.floodlightcontroller.topology.ITopologyService;
@@ -123,45 +122,26 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 	private void buildTopology() {
 		// Variables we need
 		Map<DatapathId, Set<Link>> linkMap;
-		Collection<DatapathId> idCollection;
-		Set<Link> linkSet;
-		DatapathId currentID;
-		Link currentLink;
-		int index = 0;
 		
 		linkMap = topologyService.getAllLinks();
-		log.info("Got all Links");
-		log.info("Size" + linkMap.size());
-		log.info("To String: " + linkMap.toString());
+		log.info("No. of Nodes: " + linkMap.size());
+		log.info("Complete Topology: " + linkMap.toString());
 
 		FDMTopology top = new FDMTopology(1, linkMap);
-		float delta = 1.0f;
-		float epsilon = 0.9f;
+		log.info("All Links: " + top.allLinks);
+		log.info("All Nodes: " + top.nodes);
+		Float[] a_cap = {10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f};
+		top.initCapacity(a_cap);
+		Float[][] a_req = { {0f, 0f, 0f, 5f} , {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f} };
+		log.info("All Req: " + Arrays.deepToString(a_req));
+		top.initRequirements(a_req);
+		
+		float delta = 0.002f;
+		float epsilon = 0.00001f;
 		FlowDeviationMethod fdm = new FlowDeviationMethod(delta, epsilon);
-//		globalLinkFlows = fdm.runFDM(top);
+		globalLinkFlows = fdm.runFDM(top);
 		
 		log.info("Global Flows: " + globalLinkFlows);
-	
-
-		// Get keys into collection. Allows traverse in map.
-		idCollection = linkMap.keySet();
-		
-		// Traverse collection, for each id, match links
-		while(idCollection.iterator().hasNext()){
-			currentID = idCollection.iterator().next();
-			
-			// Grab the set of links for this node
-			linkSet = linkMap.get(currentID);
-			while(linkSet.iterator().hasNext()){
-				currentLink = linkSet.iterator().next();
-				// TODO Build End1, End2, and Adj here
-				// End1.add(index, currentLink.getSrc().getLong());
-				// End2.add(index, currentLink.getDst().getLong());
-				// Adj thingy does something here...
-				
-				index++;
-			}
-		}
 		
 	}
 

@@ -60,6 +60,8 @@ class FlowDeviationMethod {
 		for(Integer i = 0; i < network.getNoLinks(); i++) {
 			FDlen[i] = Float.POSITIVE_INFINITY;
 			NewCap[i] = 0.0f;
+			globalFlow[i] = 0.0f;
+			EFlow[i] = 0.0f;
 //			Cost[i] = 0;
 		}
 		

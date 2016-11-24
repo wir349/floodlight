@@ -27,7 +27,7 @@ class FDMTopology {
 	Float[][] req;
 //	Float[][] mm_req;
 	
-	Float total_requirement; 
+	Float total_requirement = 0.0f;
 	
 	
 	Float capacity[];
@@ -68,8 +68,6 @@ class FDMTopology {
 //		FDLen = new Float[noLinks];
 		capacity = new Float[getNoLinks()];
 //		globalFlow = new Float[noLinks];
-		
-		
 	}
 	
 	public Integer getNoLinks() {
@@ -80,23 +78,11 @@ class FDMTopology {
 		return nodes.size();
 	}
 	
-//	public void addLink(Integer end1, Integer end2) {
-//		
-//		for(Integer i = 0; i < getNoLinks(); i++) {
-//			end1[i] = a_end1[i];
-//			end2[i] = a_end2[i];
-//			Adj[end1[i]].addLast(i);
-//		}
+//	public void initCapacity(Float[] linkCapacities) {
+////		capacity = new Float[getNoLinks()];
+//		capacity = linkCapacities;
 //	}
-
-//	public void initEnd1End2(Integer[] a_end1, Integer[] a_end2) {
-//		for(Integer i = 0; i < noLinks; i++) {
-//			end1[i] = a_end1[i];
-//			end2[i] = a_end2[i];
-//			Adj[end1[i]].addLast(i);
-//		}
-//	}
-	
+//	
 	public void initRequirements(Float [][] a_req) {
 		for(Integer i = 0; i < getNoNodes(); i++) {
 			for(Integer j = 0; j < getNoNodes(); j++) {
@@ -139,14 +125,14 @@ class FDMTopology {
 	public Integer getEnd1(Integer index) {
 		Link currentLink = allLinks.get(index);
 		int node = nodes.indexOf(currentLink.getSrc());
-		System.out.println("End 1 Value: " + node);
+//		System.out.println("End 1 Value: " + node);
 		return node;
 	}
 
 	public Integer getEnd2(Integer index) {
 		Link currentLink = allLinks.get(index);
 		int node = nodes.indexOf(currentLink.getDst());
-		System.out.println("End 1 Value: " + node);
+//		System.out.println("End 1 Value: " + node);
 		return node;
 	}
 
