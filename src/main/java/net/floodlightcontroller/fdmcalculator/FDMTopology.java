@@ -1,11 +1,8 @@
 package net.floodlightcontroller.fdmcalculator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
+
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import org.projectfloodlight.openflow.types.DatapathId;
@@ -33,14 +30,7 @@ class FDMTopology {
 	Float capacity[];
 	
 	Integer msgLen = 1;
-	
-//	Float CurrentDelay = 0.0f;
-//	Float[] globalFlow;
-	
-	public FDMTopology(Integer msgLen) {
-		this.msgLen = msgLen;
-	}
-	
+		
 	public FDMTopology(Integer msgLen, Map<DatapathId, Set<Link>> topLinks) {
 		super();
 		nodeAdjLinks = new LinkedList[topLinks.size()];
@@ -59,15 +49,10 @@ class FDMTopology {
 			nodes.addLast(entry.getKey());
 		}
 		
-//		end1 = new Integer[noLinks];
-//		end2 = new Integer[noLinks];
-		
 		req = new Float[getNoNodes()][getNoNodes()];
 //		mm_req = new Float[noNodes][noNodes];
 		
-//		FDLen = new Float[noLinks];
 		capacity = new Float[getNoLinks()];
-//		globalFlow = new Float[noLinks];
 	}
 	
 	public Integer getNoLinks() {
@@ -105,22 +90,6 @@ class FDMTopology {
 	public Float[][] getReq() {
 		return req;
 	}
-
-//	public Float getCurrentDelay() {
-//		return CurrentDelay;
-//	}
-//
-//	public void setCurrentDelay(Float currentDelay) {
-//		CurrentDelay = currentDelay;
-//	}
-
-//	public Float[] getGflow() {
-//		return globalFlow;
-//	}
-//
-//	public void setGflow(Float[] gflow) {
-//		globalFlow = gflow;
-//	}
 
 	public Integer getEnd1(Integer index) {
 		Link currentLink = allLinks.get(index);

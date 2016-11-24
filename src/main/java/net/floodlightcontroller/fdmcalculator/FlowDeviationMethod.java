@@ -87,7 +87,7 @@ class FlowDeviationMethod {
 		while(Aflag || (CurrentDelay < PreviousDelay*(1-EPSILON))) {
 			SetLinkLens(globalFlow, network.getCapacity(), network.getMsgLen(), FDlen);
 			SetSP(network, FDlen, network.getAdj(), shortestPathDistance, shortestPathPredecessor);
-			LoadLinks(network.getReq(), shortestPathPredecessor, network, globalFlow);
+			LoadLinks(network.getReq(), shortestPathPredecessor, network, EFlow);
 			//previous delay based on current NewCap
 			PreviousDelay = CalcDelay(globalFlow, NewCap, network.getMsgLen(), network.getTotal_requirement());
 			Superpose(EFlow, globalFlow, NewCap, network.getTotal_requirement(), network.getMsgLen());
