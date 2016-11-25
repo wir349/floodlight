@@ -44,12 +44,16 @@ import org.slf4j.LoggerFactory;
 
 public class DropMeter{
 
-	    public void createMeter(IOFSwitch sw) {
+	    public void createMeter(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nexttPort ) {
 	    	 OFFactory meterFactory = OFFactories.getFactory(OFVersion.OF_13);
 	            OFMeterMod.Builder meterModBuilder = meterFactory.buildMeterMod()
 	                .setMeterId(meterid).setCommand(0);
 
-	            int rate  = 2000; 
+
+	            /*Please change the rate here. The switch&port needed are passed as parameter to this function. */
+	            int rate  = 100; 
+	            /*End of getRate()*/
+	            
 	            OFMeterBandDrop.Builder bandBuilder = meterFactory.meterBands().buildDrop()
 	                .setRate(rate);
 	            OFMeterBand band = bandBuilder.build();
@@ -61,7 +65,7 @@ public class DropMeter{
 	            meterModBuilder.setMeters(bands)
 	                .setFlags(1).build();
 
-	            sw.write(meterModBuilder.build());
+	            currentSwitch.write(meterModBuilder.build());
 	     }
 	    
 	    public void bindMeterWithFlow(OFPort inPort, TransportPort dstPort, IPv4Address srcIp, IOFSwitch sw, TransportPort srcPort, Route path) {
@@ -104,5 +108,4 @@ public class DropMeter{
 	    protected static int meterid = 1; 
 	  
 }
-
 
