@@ -49,6 +49,7 @@ public class DropMeter{
 	            OFMeterMod.Builder meterModBuilder = meterFactory.buildMeterMod()
 	                .setMeterId(meterid).setCommand(0);
 
+
 	            /*Please change the rate here. The switch&port needed are passed as parameter to this function. */
 	            int rate  = 100; 
 	            /*End of getRate()*/
