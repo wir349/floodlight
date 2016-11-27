@@ -99,7 +99,7 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 
 	@Override
 	public float getFlowBW(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nextPort) {
-		U64 latency = new U64(0L);
+		U64 latency = U64.of(0L);
 		
 		// Build a link to send in
 		Link link = new Link(currentSwitch.getId(), currentPort, nextSwitch.getId(), nextPort, latency);
