@@ -6,6 +6,8 @@ package net.floodlightcontroller.fdmcalculator;
 import org.projectfloodlight.openflow.types.DatapathId;
 
 import net.floodlightcontroller.linkdiscovery.Link;
+import net.floodlightcontroller.core.IOFSwitch;
+import org.projectfloodlight.openflow.types.OFPort;
 
 /**
  * @author Waleed Ishrat Rahman and Krit Sae Fang
@@ -31,11 +33,13 @@ public interface IFDMCalculator {
 	
 	/**
 	 * Return the bandwidth for the link between two nodes
-	 * @param srcSwitchID - ID for the source node
-	 * @param desSwitchID - ID for the destination node
+	 * @param currentSwitch - Switch for the source node
+	 * @param currentPort - Port for the source node
+	 * @param nextSwitch - Switch for the destination node
+	 * @param nexttPort - Port for the destination node
 	 * @return bandwidth
 	 */
-	public double getFlowBW(DatapathId srcNodeID, DatapathId desNodeID);
+	public float getFlowBW(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nexttPort);
 
 	/**
 	 * Return the bandwidth for the link between two nodes
