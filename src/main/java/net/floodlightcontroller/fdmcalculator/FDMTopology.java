@@ -22,7 +22,6 @@ class FDMTopology {
 	LinkedList<DatapathId> nodes = new LinkedList<DatapathId>();
 
 	Float[][] req;
-//	Float[][] mm_req;
 	
 	Float total_requirement = 0.0f;
 	
@@ -50,7 +49,6 @@ class FDMTopology {
 		}
 		
 		req = new Float[getNoNodes()][getNoNodes()];
-//		mm_req = new Float[noNodes][noNodes];
 		
 		capacity = new Float[getNoLinks()];
 	}
@@ -78,7 +76,6 @@ class FDMTopology {
 				else {
 					req[i][j] = 0.0f;
 				}
-//				mm_req[i][j] = 0.0f;
 			}
 		}
 	}

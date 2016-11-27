@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.projectfloodlight.openflow.types.DatapathId;
 import org.projectfloodlight.openflow.types.OFPort;
+import org.projectfloodlight.openflow.types.U64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,11 +98,11 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 	}
 
 	@Override
-	public double getFlowBW(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nextPort) {
-		U64 latency = 0; // Dummy
+	public float getFlowBW(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nextPort) {
+		U64 latency;
 		
 		// Build a link to send in
-		Link link = new Link(currentSwitch.getID(), currentPort., nextSwitch.getID(), nextPort, latency);
+		Link link = new Link(currentSwitch.getId(), currentPort, nextSwitch.getId(), nextPort, latency);
 		
 		return globalLinkFlows.get(link);
 	}
