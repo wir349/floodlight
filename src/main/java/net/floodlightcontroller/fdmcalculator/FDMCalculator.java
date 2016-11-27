@@ -8,11 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.projectfloodlight.openflow.types.DatapathId;
-import org.projectfloodlight.openflow.types.OFPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.floodlightcontroller.core.IOFSwitch;
 import net.floodlightcontroller.core.module.FloodlightModuleContext;
 import net.floodlightcontroller.core.module.FloodlightModuleException;
 import net.floodlightcontroller.core.module.IFloodlightModule;
@@ -85,29 +83,27 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 	public void addFlow(DatapathId srcNodeID, DatapathId desNodeID,
 			double requestBW) {
 		// TODO Auto-generated method stub
-		// THIS IS OUTSIDE FALL 2016 SCOPE - ADDED AS TEMPLATE FOR FUTURE WORK
-		//calculateFDM();
+		// req.add
+		calculateFDM();
 	}
 
 	@Override
 	public void removeFlow(DatapathId srcNodeID, DatapathId desNodeID) {
 		// TODO Auto-generated method stub
-		// THIS IS OUTSIDE FALL 2016 SCOPE - ADDED AS TEMPLATE FOR FUTURE WORK
-		//calculateFDM();
+		// req.remove
+		calculateFDM();
 	}
 
 	@Override
-	public double getFlowBW(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nextPort) {
-		U64 latency = 0; // Dummy
-		
-		// Build a link to send in
-		Link link = new Link(currentSwitch.getID(), currentPort., nextSwitch.getID(), nextPort, latency);
-		
-		return globalLinkFlows.get(link);
+	public double getFlowBW(DatapathId srcNodeID, DatapathId desNodeID) {
+		// TODO Auto-generated method stub
+		// Go through End1 and End2, find match, find match in Gflow
+		return 0.0;
 	}
 	
 	@Override
 	public float getFlowBW(Link link) {
+		// TODO Auto-generated method stub
 		return globalLinkFlows.get(link);
 	}
 	
