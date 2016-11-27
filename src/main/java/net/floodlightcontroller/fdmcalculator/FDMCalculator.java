@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.projectfloodlight.openflow.types.DatapathId;
 import org.projectfloodlight.openflow.types.OFPort;
+import org.projectfloodlight.openflow.types.U64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ import net.floodlightcontroller.linkdiscovery.ILinkDiscovery.LDUpdate;
 import net.floodlightcontroller.linkdiscovery.Link;
 import net.floodlightcontroller.topology.ITopologyListener;
 import net.floodlightcontroller.topology.ITopologyService;
+
 
 public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodlightModule {
 
@@ -101,7 +103,7 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		U64 latency = 0; // Dummy
 		
 		// Build a link to send in
-		Link link = new Link(currentSwitch.getID(), currentPort., nextSwitch.getID(), nextPort, latency);
+		Link link = new Link(currentSwitch.getId(), currentPort, nextSwitch.getId(), nextPort, latency);
 		
 		return globalLinkFlows.get(link);
 	}
