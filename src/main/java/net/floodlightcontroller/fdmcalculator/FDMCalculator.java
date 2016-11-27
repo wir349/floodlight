@@ -135,9 +135,9 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		FDMTopology top = new FDMTopology(1, linkMap);
 		log.info("All Links: " + top.allLinks);
 		log.info("All Nodes: " + top.nodes);
-		Float[] a_cap = {10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f};
+		Float[] a_cap = {Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 10.0f, 20.0f, Float.MAX_VALUE};
 		top.initCapacity(a_cap);
-		Float[][] a_req = { {0f, 0f, 0f, 10f} , {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f} };
+		Float[][] a_req = { {0f, 0f, 0f, 15f} , {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f} };
 		log.info("All Req: " + Arrays.deepToString(a_req));
 		top.initRequirements(a_req);
 		
