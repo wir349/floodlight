@@ -135,88 +135,88 @@ class FlowDeviationMethod {
 		 	System.out.println("current delay is " + CurrentDelay);
 			System.out.println("current count is " + count);
 		}
-//		else {
-//
-//			//initialize request for infeasible problem
-//			for(i = 0; i < NN; i++) {
-//				for(n = 0; n < NN; n++) {
-//					if (Req[i][n] != 0) {
-//						MM_Req[i][n] = STEP;
-//					}
-//				}
-//			}
-//			prInteger = true;
-//			while(prInteger) {
-//				TotReq = 0;
-//				PreviousDelay = INFINITY;
-//
-//				for(i = 0; i < NN; i++) {
-//					for(n = 0; n < NN; n ++) {
-//						TotReq += MM_Req[i][n];
-//					}
-//				}
-//				for(i = 0; i < network.getNoLinks(); i ++) {
-//					Gflow[i] = 0;
-//				}
-//				SetLinkLens(NL, Gflow, Cap, MsgLen, FDlen, Cost);
-//				SetSP(NN, End2, FDlen, Adj, shortestPathDistance, SPpred);
-//				LoadLinks(NN, NL, MM_Req, SPpred, End1, Gflow);
-//				Aresult = AdjustCaps(NL, Gflow, Cap, NewCap);
-//				if (Aresult == 1)
-//					Aflag = 0;
-//				else
-//					Aflag = 1;
-//				CurrentDelay = CalcDelay(NL, Gflow, NewCap, MsgLen, TotReq, Cost);
-//				count = 0;
-//				while(Aflag || (CurrentDelay < PreviousDelay*(1-EPSILON))) {
-//					SetLinkLens(NL, Gflow, NewCap, MsgLen, FDlen, Cost);
-//					SetSP(NN, End2, FDlen, Adj, SPdist, SPpred);
-//					LoadLinks(NN, NL, MM_Req, SPpred, End1, Eflow);
-//					Superpose(NL, Eflow, Gflow, NewCap, TotReq, MsgLen, Cost);
-//
-//					if (Aflag) {
-//						Aresult = AdjustCaps(NL, Gflow, Cap, NewCap);
-//						if (Aresult == 1)
-//							Aflag = 0;
-//						else
-//							Aflag = 1;
-//					}
-//					PreviousDelay = CurrentDelay;
-//					CurrentDelay = CalcDelay(NL, Gflow, NewCap, MsgLen, TotReq, Cost);
-//					//judge whether the problem is feasible 
-//					Float max_FD_len = 0, min_FD_len = INFINITY;
-//					for (Integer i = 0; i < network.getNoLinks(); i++) {
-//						if (FDlen[i] > 0) {
-//							max_FD_len = max(max_FD_len, FDlen[i]);
-//							min_FD_len = min(min_FD_len, FDlen[i]);
-//						}
-//					}
-//					//if(Aflag == 1 && (CurrentDelay >= PreviousDelay*(1-EPSILON))) {
-//					if ((Aflag == 1 && (max_FD_len - min_FD_len)<EPSILON) || count == 100) {
-//						System.out.print("The problem becomes infeasible.\n");
-//						prInteger = 0;
-//						break;
-//					}
-//					count++;
-//				}
-//
-//				//increase the MM_Req
-//				for(i = 0; i < NN; i++) {
-//					for(n = 0; n < NN; n++) {
-//						MM_Req[i][n] = min(Req[i][n], MM_Req[i][n] + STEP);
-//						
-//					}
-//				}
-//				if(prInteger == 0) {
-//					for(i = 0; i < network.getNoLinks(); i++) {
-//						System.out.print("When the problem is feasible Gflow[%d] = %f\n", i, Pflow[i]);
-//					}
-//				}	
-//				for(i = 0; i < network.getNoLinks(); i++) {
-//					Pflow[i] = Gflow[i];
-//				}		
-//			}
-//		}
+		//------------------------------------
+		// Start case for infeasible problem
+		//------------------------------------
+		/**
+		else {
+
+			prInteger = true;
+			while(prInteger) {
+				TotReq = 0;
+				PreviousDelay = INFINITY;
+
+				for(i = 0; i < network.getNoNodes(); i++) {
+					for(n = 0; n < network.getNoNodes(); n ++) {
+						TotReq += MM_Req[i][n];
+					}
+				}
+				for(i = 0; i < network.getNoLinks(); i ++) {
+					Gflow[i] = 0;
+				}
+				SetLinkLens(NL, Gflow, Cap, MsgLen, FDlen, Cost);
+				SetSP(NN, End2, FDlen, Adj, shortestPathDistance, SPpred);
+				LoadLinks(NN, NL, MM_Req, SPpred, End1, Gflow);
+				Aresult = AdjustCaps(NL, Gflow, Cap, NewCap);
+				if (Aresult == 1)
+					Aflag = 0;
+				else
+					Aflag = 1;
+				CurrentDelay = CalcDelay(NL, Gflow, NewCap, MsgLen, TotReq, Cost);
+				count = 0;
+				while(Aflag || (CurrentDelay < PreviousDelay*(1-EPSILON))) {
+					SetLinkLens(NL, Gflow, NewCap, MsgLen, FDlen, Cost);
+					SetSP(NN, End2, FDlen, Adj, SPdist, SPpred);
+					LoadLinks(NN, NL, MM_Req, SPpred, End1, Eflow);
+					Superpose(NL, Eflow, Gflow, NewCap, TotReq, MsgLen, Cost);
+
+					if (Aflag) {
+						Aresult = AdjustCaps(NL, Gflow, Cap, NewCap);
+						if (Aresult == 1)
+							Aflag = 0;
+						else
+							Aflag = 1;
+					}
+					PreviousDelay = CurrentDelay;
+					CurrentDelay = CalcDelay(NL, Gflow, NewCap, MsgLen, TotReq, Cost);
+					//judge whether the problem is feasible 
+					Float max_FD_len = 0, min_FD_len = INFINITY;
+					for (Integer i = 0; i < network.getNoLinks(); i++) {
+						if (FDlen[i] > 0) {
+							max_FD_len = max(max_FD_len, FDlen[i]);
+							min_FD_len = min(min_FD_len, FDlen[i]);
+						}
+					}
+					//if(Aflag == 1 && (CurrentDelay >= PreviousDelay*(1-EPSILON))) {
+					if ((Aflag == 1 && (max_FD_len - min_FD_len)<EPSILON) || count == 100) {
+						System.out.print("The problem becomes infeasible.\n");
+						prInteger = 0;
+						break;
+					}
+					count++;
+				}
+
+				//increase the MM_Req
+				for(i = 0; i < NN; i++) {
+					for(n = 0; n < NN; n++) {
+						MM_Req[i][n] = min(Req[i][n], MM_Req[i][n] + STEP);
+						
+					}
+				}
+				if(prInteger == 0) {
+					for(i = 0; i < network.getNoLinks(); i++) {
+						System.out.print("When the problem is feasible Gflow[%d] = %f\n", i, Pflow[i]);
+					}
+				}	
+				for(i = 0; i < network.getNoLinks(); i++) {
+					Pflow[i] = Gflow[i];
+				}		
+			}
+		}
+		**/
+		//------------------------------------
+		// End case for infeasible problem
+		//------------------------------------
 		return getGlobalFlows(network);
 	}
 
@@ -343,9 +343,7 @@ Float FindX(Float Gflow[], Float Eflow[], Float Cap[], Float TotReq, Integer Msg
 	xLimit = st;	
 	
 	Float x0 = 0.0f; Float f0 = DelayF(x0, Eflow, Gflow, Cap, MsgLen, TotReq);
-	//Float x4 = 1.0; Float f4 = DelayF(x4, nl, Eflow, Gflow, Cap, MsgLen, TotReq, Cost);
 	Float x4 = xLimit; Float f4 = DelayF(x4, Eflow, Gflow, Cap, MsgLen, TotReq);
-	//Float x2 = 0.5; Float f2 = DelayF(x2, nl, Eflow, Gflow, Cap, MsgLen, TotReq, Cost);
 	Float x2 = (x0+x4)/2; Float f2 = DelayF(x2, Eflow, Gflow, Cap, MsgLen, TotReq);
 
 	while(x4-x0 > EPSILON) {

@@ -25,7 +25,6 @@ class FDMTopology {
 	
 	Float total_requirement = 0.0f;
 	
-	
 	Float capacity[];
 	
 	Integer msgLen = 1;
