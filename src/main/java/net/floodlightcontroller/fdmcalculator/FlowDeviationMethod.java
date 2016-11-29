@@ -50,7 +50,7 @@ class FlowDeviationMethod {
 		
 		EFlow = new Float[network.getNoLinks()]; // Current Extremal in Book
 		globalFlow = new Float[network.getNoLinks()]; //GFlow in Book
-		PFlow = new Float[network.getNoNodes()];
+		PFlow = new Float[network.getNoLinks()];
 		
 		shortestPathDistance = new Float[network.getNoNodes()][network.getNoNodes()];
 		shortestPathPredecessor = new Integer[network.getNoNodes()][network.getNoNodes()];
