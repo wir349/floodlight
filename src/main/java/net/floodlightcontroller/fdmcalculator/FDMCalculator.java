@@ -153,10 +153,6 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 
 				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE,
 				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE};
-		if(a_cap.length != top.getNoLinks()) {
-			log.info("Capacity Incorrectly Initialized with " + a_cap.length + " and " + top.getNoLinks() + "capacities listed");
-			System.exit(0);
-		}
 		top.initCapacity(a_cap);
 		Float[][] a_req = { 
 				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
