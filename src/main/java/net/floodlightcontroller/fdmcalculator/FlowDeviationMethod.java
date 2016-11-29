@@ -12,7 +12,7 @@ class FlowDeviationMethod {
 	public FlowDeviationMethod(float delta, float epsilon, float step) {
 		EPSILON = epsilon;
 		DELTA = delta;
-		STEP = step
+		STEP = step;
 	}
 	
 	Float EPSILON;
@@ -21,7 +21,7 @@ class FlowDeviationMethod {
 
 	Float[] globalFlow;
 	Float[] EFlow;
-	Float[] Pflow;
+	Float[] PFlow;
 
 	Float[][] shortestPathDistance;
 	Integer[][] shortestPathPredecessor;
@@ -62,7 +62,7 @@ class FlowDeviationMethod {
 			FDlen[i] = Float.POSITIVE_INFINITY;
 			NewCap[i] = 0.0f;
 			globalFlow[i] = 0.0f;
-			pFlow[i] = 0.0f;
+			PFlow[i] = 0.0f;
 			EFlow[i] = 0.0f;
 //			Cost[i] = 0;
 		}
@@ -141,11 +141,11 @@ class FlowDeviationMethod {
             // Begin Min-Max FMD for infeasible problem
             //----------------------------------------------------------------------
             // Initialize request for infeasible problem
-            Float tempMMReq[network.getNoNodes()][network.getNoNodes()];
-            
+        	Float tempMMReq[][] = new Float[network.getNoNodes()][network.getNoNodes()];
+
             // Initialize a temp array to work with
-            for(i = 0; i < network.getNoNodes(); i++) {
-                for(n = 0; n < network.getNoNodes(); n++) {
+            for(int i = 0; i < network.getNoNodes(); i++) {
+                for(int n = 0; n < network.getNoNodes(); n++) {
                     if (network.getReq()[i][n] != 0) {
                         tempMMReq[i][n] = STEP;
                     } else {
@@ -161,8 +161,8 @@ class FlowDeviationMethod {
             while(prInteger) {
                 PreviousDelay = Float.POSITIVE_INFINITY;
 
-                for(i = 0; i < network.getNoLinks(); i ++) {
-                    globalflow[i] = 0;
+                for(int i = 0; i < network.getNoLinks(); i ++) {
+                	globalFlow[i] = 0f;
                 }
                 
                 SetLinkLens(globalFlow, network.getCapacity(), network.getMsgLen(), FDlen);
@@ -171,9 +171,9 @@ class FlowDeviationMethod {
                 Aresult = AdjustCaps(globalFlow, network.getCapacity(), NewCap);
                 
                 if (Aresult == 1)
-                    Aflag = 0;
+                    Aflag = false;
                 else
-                    Aflag = 1;
+                    Aflag = true;
                 
                 CurrentDelay = CalcDelay(globalFlow, NewCap, network.getMsgLen(), network.getMM_Total_requirement());
                 count = 0;
@@ -187,39 +187,39 @@ class FlowDeviationMethod {
                     if (Aflag) {
                         Aresult = AdjustCaps(globalFlow, network.getCapacity(), NewCap);
                         if (Aresult == 1)
-                            Aflag = 0;
+                            Aflag = false;
                         else
-                            Aflag = 1;
+                            Aflag = true;
                     }
                     PreviousDelay = CurrentDelay;
                     CurrentDelay = CalcDelay(globalFlow, NewCap, network.getMsgLen(), network.getMM_Total_requirement());
                     
                     //judge whether the problem is feasible 
-                    Float max_FD_len = 0, min_FD_len = Float.POSITIVE_INFINITY;
+                    Float max_FD_len = 0f, min_FD_len = Float.POSITIVE_INFINITY;
                     for (Integer i = 0; i < network.getNoLinks(); i++) {
                         if (FDlen[i] > 0) {
-                            max_FD_len = max(max_FD_len, FDlen[i]);
-                            min_FD_len = min(min_FD_len, FDlen[i]);
+                            max_FD_len = Math.max(max_FD_len, FDlen[i]);
+                            min_FD_len = Math.min(min_FD_len, FDlen[i]);
                         }
                     }
                     //if(Aflag == 1 && (CurrentDelay >= PreviousDelay*(1-EPSILON))) {
-                    if ((Aflag == 1 && (max_FD_len - min_FD_len)<EPSILON) || count == 100) {
+                    if ((Aflag == true && (max_FD_len - min_FD_len)<EPSILON) || count == 100) {
                         System.out.print("The problem becomes infeasible.\n");
-                        prInteger = 0;
+                        prInteger = false;
                         break;
                     }
                     count++;
                 }
 
                 //increase the MM_Req
-                network.increaseMMReqByStep(STEP)
-                if(prInteger == 0) {
-                    for(i = 0; i < network.getNoLinks(); i++) {
-                        System.out.print("When the problem is feasible Gflow[%d] = %f\n", i, Pflow[i]);
+                network.increaseMMReqByStep(STEP);
+                if(prInteger == false) {
+                    for(int i = 0; i < network.getNoLinks(); i++) {
+                        System.out.print("When the problem is feasible Gflow[" + i + "] = " + PFlow[i] + "\n");
                     }
                 }    
-                for(i = 0; i < network.getNoLinks(); i++) {
-                    Pflow[i] = globalGlow[i];
+                for(int i = 0; i < network.getNoLinks(); i++) {
+                	PFlow[i] = globalFlow[i];
                 }        
             }
         }
@@ -320,7 +320,7 @@ Float CalcDelay(Float Flow[], Float Cap[], Integer MsgLen, Float TotReq) {
 void Superpose(Float Eflow[], Float Gflow[], Float Cap[], Float TotReq, Integer MsgLen) {
 	Float x = FindX(Gflow, Eflow, Cap, TotReq, MsgLen);
 	for(Integer l = 0; l < Gflow.length; l++) {
-		Pflow[l] = Gflow[l];
+		PFlow[l] = Gflow[l];
 		Gflow[l] = x*Eflow[l] + (1-x)*Gflow[l];
 	
 	}
