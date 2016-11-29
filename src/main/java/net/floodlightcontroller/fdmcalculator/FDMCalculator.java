@@ -130,9 +130,29 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		FDMTopology top = new FDMTopology(1, linkMap);
 		log.info("All Links: " + top.allLinks);
 		log.info("All Nodes: " + top.nodes);
-		Float[] a_cap = {10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f};
+		log.info("No. of Links: " + top.getNoLinks());
+		Float[] a_cap = {
+				5.0f, 6.0f, 7.0f, 
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE, 
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE,
+				Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE};
+		if(a_cap.length != top.getNoLinks()) {
+			log.info("Capacity Incorrectly Initialized");
+			System.exit(0);
+		}
 		top.initCapacity(a_cap);
-		Float[][] a_req = { {0f, 0f, 0f, 5f} , {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f}, {0f, 0f, 0f, 0f} };
+		Float[][] a_req = { 
+				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{5f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{6f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{1f, 0f, 0f, 0f, 0f, 0f, 0f } };
 		log.info("All Req: " + Arrays.deepToString(a_req));
 		top.initRequirements(a_req);
 		
