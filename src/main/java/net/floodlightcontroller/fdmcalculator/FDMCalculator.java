@@ -8,9 +8,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.projectfloodlight.openflow.types.DatapathId;
+import org.projectfloodlight.openflow.types.OFPort;
+import org.projectfloodlight.openflow.types.U64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.floodlightcontroller.core.IOFSwitch;
 import net.floodlightcontroller.core.module.FloodlightModuleContext;
 import net.floodlightcontroller.core.module.FloodlightModuleException;
 import net.floodlightcontroller.core.module.IFloodlightModule;
@@ -106,6 +109,16 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		// TODO Auto-generated method stub
 		return globalLinkFlows.get(link);
 	}
+	
+	public float getFlowBW(IOFSwitch currentSwitch, OFPort currentPort,IOFSwitch nextSwitch, OFPort nextPort) {
+		U64 latency = U64.of(0L);
+		
+		// Build a link to send in
+		Link link = new Link(currentSwitch.getId(), currentPort, nextSwitch.getId(), nextPort, latency);
+		
+		return globalLinkFlows.get(link);
+	}
+
 	
 	/**
 	 * Main function for doing FDM
