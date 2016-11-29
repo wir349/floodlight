@@ -22,8 +22,10 @@ class FDMTopology {
 	LinkedList<DatapathId> nodes = new LinkedList<DatapathId>();
 
 	Float[][] req;
+	Float[][] mm_req;
 	
 	Float total_requirement = 0.0f;
+	Float mm_total_requirement = 0.0f;
 	
 	Float capacity[];
 	
@@ -48,6 +50,7 @@ class FDMTopology {
 		}
 		
 		req = new Float[getNoNodes()][getNoNodes()];
+		mm_req = new Float[getNoNodes()][getNoNodes()]
 		
 		capacity = new Float[getNoLinks()];
 	}
@@ -61,7 +64,7 @@ class FDMTopology {
 	}
 	
 //	public void initCapacity(Float[] linkCapacities) {
-////		capacity = new Float[getNoLinks()];
+//		capacity = new Float[getNoLinks()];
 //		capacity = linkCapacities;
 //	}
 //	
@@ -79,12 +82,54 @@ class FDMTopology {
 		}
 	}
 	
+	public void initMMRequirements(Float [][] a_req) {
+		for(Integer i = 0; i < getNoNodes(); i++) {
+			for(Integer j = 0; j < getNoNodes(); j++) {
+				if (a_req[i][j] > 0) {
+					mm_req[i][j] = a_req[i][j];
+					mm_total_requirement += a_req[i][j];
+				}
+				else {
+					mm_req[i][j] = 0.0f;
+				}
+			}
+		}
+	}
+	
 	public void initCapacity(Float[] a_cap) {
 		System.arraycopy(a_cap, 0, capacity, 0, capacity.length);
 	}
 
 	public Float[][] getReq() {
 		return req;
+	}
+	
+	public Float[][] getMMReq() {
+		return mm_req;
+	}
+	
+	public void increaseMMReqByStep(Float step) {
+		for(Integer i = 0; i < getNoNodes(); i++) {
+			for(Integer j = 0; j < getNoNodes(); j++) {
+				// If a req exists, increase it by step
+				if (mm_req[i][j] > 0) {
+					mm_req[i][j] += step;
+				}
+				// If we overshot the true request, set it to true request
+				if (mm_req[i][j] > req[i][j]) {
+					mm_req[i][j] = req[i][j];
+				}
+			}
+		}
+	}
+	
+	public void recalculateTotalReqs() {
+		for(Integer i = 0; i < getNoNodes(); i++) {
+			for(Integer j = 0; j < getNoNodes(); j++) {
+				total_requirement += req[i][j];
+				mm_total_requirement += mm_req[i][j];
+			}
+		}
 	}
 
 	public Integer getEnd1(Integer index) {
@@ -103,6 +148,10 @@ class FDMTopology {
 
 	public Float getTotal_requirement() {
 		return total_requirement;
+	}
+	
+	public Float getMM_Total_requirement() {
+		return mm_total_requirement;
 	}
 
 	public LinkedList<Integer>[] getAdj() {

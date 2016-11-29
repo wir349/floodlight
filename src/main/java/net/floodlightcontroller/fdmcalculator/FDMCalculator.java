@@ -143,7 +143,8 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 		
 		float delta = 0.002f;
 		float epsilon = 0.00001f;
-		FlowDeviationMethod fdm = new FlowDeviationMethod(delta, epsilon);
+		float step = 0.05f
+		FlowDeviationMethod fdm = new FlowDeviationMethod(delta, epsilon, step);
 		globalLinkFlows = fdm.runFDM(top);
 		log.info("All Cap: " + Arrays.deepToString(top.getCapacity()));
 		log.info("Global Flows: " + globalLinkFlows);
