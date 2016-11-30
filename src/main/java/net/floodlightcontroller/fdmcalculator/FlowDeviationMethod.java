@@ -141,6 +141,8 @@ class FlowDeviationMethod {
             // Begin Min-Max FMD for infeasible problem
             //----------------------------------------------------------------------
             // Initialize request for infeasible problem
+        	System.out.print("Starting infeasible problem calculations with Min-Max.\n");
+        	System.out.print("STEP value is " + STEP);
         	Float tempMMReq[][] = new Float[network.getNoNodes()][network.getNoNodes()];
 
             // Initialize a temp array to work with
@@ -157,8 +159,11 @@ class FlowDeviationMethod {
             // Pass temp array to network
             network.initMMRequirements(tempMMReq);
             
+            System.out.print("initMMRequirements called.\n");
+            
             prInteger = true;
             while(prInteger) {
+            	System.out.print("prInteger while loop started.\n");
                 PreviousDelay = Float.POSITIVE_INFINITY;
 
                 for(int i = 0; i < network.getNoLinks(); i ++) {
@@ -178,6 +183,7 @@ class FlowDeviationMethod {
                 CurrentDelay = CalcDelay(globalFlow, NewCap, network.getMsgLen(), network.getMM_Total_requirement());
                 count = 0;
                 while(Aflag || (CurrentDelay < PreviousDelay*(1-EPSILON))) {
+                	System.out.print("Delay comparisions while loop started on count " + count + ".\n");
                     
                     SetLinkLens(globalFlow, network.getCapacity(), network.getMsgLen(), FDlen);
                     SetSP(network, FDlen, network.getAdj(), shortestPathDistance, shortestPathPredecessor);
@@ -213,6 +219,8 @@ class FlowDeviationMethod {
 
                 //increase the MM_Req
                 network.increaseMMReqByStep(STEP);
+                System.out.print("MM_REQ increased.\n");
+                
                 if(prInteger == false) {
                     for(int i = 0; i < network.getNoLinks(); i++) {
                         System.out.print("When the problem is feasible Gflow[" + i + "] = " + PFlow[i] + "\n");
