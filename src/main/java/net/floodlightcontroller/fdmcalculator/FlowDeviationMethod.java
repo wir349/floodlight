@@ -146,7 +146,7 @@ class FlowDeviationMethod {
         	
         	float max_request = 0f;
         	float min_request = 0f;
-        	float mid;
+        	float mid = 0f;
         	
         	for (int i = 0 ; i < network.getNoNodes() ; i++ ){
             	for (int n = 0 ; n < network.getNoNodes() ; i++ ){
