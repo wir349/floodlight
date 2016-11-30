@@ -159,9 +159,9 @@ public class FDMCalculator implements IFDMCalculator, ITopologyListener, IFloodl
 				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
 				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
 				{0f, 0f, 0f, 0f, 0f, 0f, 0f },
-				{5f, 0f, 0f, 0f, 0f, 0f, 0f },
-				{6f, 0f, 0f, 0f, 0f, 0f, 0f },
-				{1f, 0f, 0f, 0f, 0f, 0f, 0f } };
+				{7f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{8f, 0f, 0f, 0f, 0f, 0f, 0f },
+				{6f, 0f, 0f, 0f, 0f, 0f, 0f } };
 		log.info("All Req: " + Arrays.deepToString(a_req));
 		top.initRequirements(a_req);
 		
