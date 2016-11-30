@@ -116,10 +116,10 @@ class FDMTopology {
                 // If a req exists, increase it by step
                 if (mm_req[i][j] > 0) {
                     mm_req[i][j] += step;
-                }
-                // If we overshot the true request, set it to true request
-                if (mm_req[i][j] > req[i][j]) {
-                    mm_req[i][j] = req[i][j];
+                 // If we overshot the true request, set it to true request
+                    if (mm_req[i][j] > req[i][j]) {
+                        mm_req[i][j] = req[i][j];
+                    }
                 }
             }
         }
