@@ -149,7 +149,7 @@ class FlowDeviationMethod {
         	float mid = 0f;
         	
         	for (int i = 0 ; i < network.getNoNodes() ; i++ ){
-            	for (int n = 0 ; n < network.getNoNodes() ; i++ ){
+            	for (int n = 0 ; n < network.getNoNodes() ; n++ ){
             		max_request = Math.max(max_request, network.getReq()[i][n]);
             	}
         	}
@@ -160,7 +160,7 @@ class FlowDeviationMethod {
         		mid = min_request + ((max_request - min_request) / 2);
         		
             	for (int i = 0 ; i < network.getNoNodes() ; i++ ){
-                	for (int n = 0 ; n < network.getNoNodes() ; i++ ){
+                	for (int n = 0 ; n < network.getNoNodes() ; n++ ){
                 		if (network.getReq()[i][n] > 0) {
                 			tempMMReq[i][n] = Math.min(network.getReq()[i][n] , mid);
                 		} else {
