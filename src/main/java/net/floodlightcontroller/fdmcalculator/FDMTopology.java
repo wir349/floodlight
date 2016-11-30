@@ -85,6 +85,7 @@ class FDMTopology {
 	}
 	
     public void initMMRequirements(Float [][] a_req) {
+    	mm_total_requirement = 0.0f;
         for(Integer i = 0; i < getNoNodes(); i++) {
             for(Integer j = 0; j < getNoNodes(); j++) {
                 if (a_req[i][j] > 0) {
@@ -132,6 +133,8 @@ class FDMTopology {
     }
     
     public void recalculateTotalReqs() {
+    	total_requirement = 0.0f;
+        mm_total_requirement = 0.0f;
         for(Integer i = 0; i < getNoNodes(); i++) {
             for(Integer j = 0; j < getNoNodes(); j++) {
                 total_requirement += req[i][j];
