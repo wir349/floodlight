@@ -142,7 +142,7 @@ class FlowDeviationMethod {
             //----------------------------------------------------------------------
             // Initialize request for infeasible problem
         	System.out.print("Starting infeasible problem calculations with Min-Max.\n");
-        	System.out.print("STEP value is " + STEP);
+        	System.out.print("STEP value is " + STEP + "\n");
         	Float tempMMReq[][] = new Float[network.getNoNodes()][network.getNoNodes()];
 
             // Initialize a temp array to work with
@@ -234,7 +234,7 @@ class FlowDeviationMethod {
                 }
                 
                 tempCount++;
-                if(tempCount > 20){
+                if(tempCount > 100){
                 	prInteger = false;
                 	System.out.print("Loop limit reached.\n");
                 }

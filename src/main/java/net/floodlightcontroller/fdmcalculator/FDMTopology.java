@@ -111,15 +111,20 @@ class FDMTopology {
     }
     
     public void increaseMMReqByStep(Float step) {
+    	// Clear mm_total_requirement first so we can get new values
         for(Integer i = 0; i < getNoNodes(); i++) {
             for(Integer j = 0; j < getNoNodes(); j++) {
                 // If a req exists, increase it by step
                 if (mm_req[i][j] > 0) {
                     mm_req[i][j] += step;
-                 // If we overshot the true request, set it to true request
+                    
+                    // If we overshot the true request, set it to true request
                     if (mm_req[i][j] > req[i][j]) {
                         mm_req[i][j] = req[i][j];
                     }
+                    
+                    // Add to new total
+                    mm_total_requirement += mm_req[i][j];
                 }
             }
         }
