@@ -150,7 +150,7 @@ class FlowDeviationMethod {
         	
         	for (int i = 0 ; i < network.getNoNodes() ; i++ ){
             	for (int n = 0 ; n < network.getNoNodes() ; i++ ){
-            		max_request = Math.max(max_request, network.network.getReq()[i][n]);
+            		max_request = Math.max(max_request, network.getReq()[i][n]);
             	}
         	}
         	
@@ -161,8 +161,8 @@ class FlowDeviationMethod {
         		
             	for (int i = 0 ; i < network.getNoNodes() ; i++ ){
                 	for (int n = 0 ; n < network.getNoNodes() ; i++ ){
-                		if (network.network.getReq()[i][n] > 0) {
-                			tempMMReq[i][n] = Math.min(network.network.getReq()[i][n] , mid);
+                		if (network.getReq()[i][n] > 0) {
+                			tempMMReq[i][n] = Math.min(network.getReq()[i][n] , mid);
                 		} else {
                 			tempMMReq[i][n] = 0f;
                 		}
@@ -216,7 +216,7 @@ class FlowDeviationMethod {
                         min_FD_len = Math.min(min_FD_len, FDlen[i]);
                     }
                 }
-                if((Aflag == 1) && (CurrentDelay >= PreviousDelay*(1-EPSILON))) {
+                if(Aflag && (CurrentDelay >= PreviousDelay*(1-EPSILON))) {
                 //if ((Aflag == true && (max_FD_len - min_FD_len)<EPSILON) || count == 100) {
                     System.out.print("The problem becomes infeasible.\n");
                     prInteger = false;
