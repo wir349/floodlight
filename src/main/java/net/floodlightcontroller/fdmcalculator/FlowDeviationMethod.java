@@ -223,6 +223,7 @@ class FlowDeviationMethod {
                 //increase the MM_Req
                 network.increaseMMReqByStep(STEP);
                 System.out.print("MM_REQ increased.\n");
+                System.out.print("MM_REQ total request is now at " + network.getMM_Total_requirement() + "\n");
                 
                 if(prInteger == false) {
                     for(int i = 0; i < network.getNoLinks(); i++) {
