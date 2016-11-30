@@ -162,6 +162,9 @@ class FlowDeviationMethod {
             System.out.print("initMMRequirements called.\n");
             
             prInteger = true;
+            
+            int tempCount = 0;
+            
             while(prInteger) {
             	System.out.print("prInteger while loop started.\n");
                 PreviousDelay = Float.POSITIVE_INFINITY;
@@ -228,7 +231,13 @@ class FlowDeviationMethod {
                 }    
                 for(int i = 0; i < network.getNoLinks(); i++) {
                 	PFlow[i] = globalFlow[i];
-                }        
+                }
+                
+                tempCount++;
+                if(tempCount > 20){
+                	prInteger = false;
+                	System.out.print("Loop limit reached.\n");
+                }
             }
         }
 
